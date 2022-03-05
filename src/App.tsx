@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Layout from "./layout/Layout";
+import Home from "./pages/Home";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Profile from "./pages/Profile";
+import Casting from "./pages/Casting";
+import Board from "./pages/Board";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+   return (
+      <>
+         <Router>
+            <Layout>
+               <Switch>
+                  <Route path="/" exact component={Home} />
+                  <Route path="/account" exact component={Board} />
+                  <Route path="/profile" exact component={Profile} />
+                  <Route path={`/casting/`} component={Casting} />
+               </Switch>
+            </Layout>
+         </Router>
+      </>
+   );
 }
 
 export default App;
