@@ -26,8 +26,9 @@ export default function CastingCard() {
          <CardActions>
             <Button size="small">Share</Button>
             <Button size="small" onClick={goCasting}>
-               Learn More
+               Open
             </Button>
+            <Button size="small">Status: Aplicado</Button>
          </CardActions>
       </Card>
    );

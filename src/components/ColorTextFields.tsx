@@ -69,7 +69,7 @@ export default function ColorTextFields() {
             ))}
          </TextField>
          <TextField
-            label="Genero"
+            label="Mi génerx es"
             color="secondary"
             focused
             sx={{ m: "auto", width: 200 }}

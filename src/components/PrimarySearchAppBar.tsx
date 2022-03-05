@@ -85,6 +85,9 @@ function PrimarySearchAppBar() {
       handleMenuClose();
       history.push("/account");
    };
+   const goNotifications = () => {
+      history.push("/notifications");
+   };
 
    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorEl(event.currentTarget);
@@ -223,14 +226,15 @@ function PrimarySearchAppBar() {
                      },
                   }}
                >
-                  <IconButton aria-label="show 4 new mails" color="inherit">
+                  {/* <IconButton aria-label="show 4 new mails" color="inherit">
                      <Badge badgeContent={4} color="error">
                         <MailIcon />
                      </Badge>
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                      aria-label="show 17 new notifications"
                      color="inherit"
+                     onClick={goNotifications}
                   >
                      <Badge badgeContent={17} color="error">
                         <NotificationsIcon />

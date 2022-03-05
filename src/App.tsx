@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Profile from "./pages/Profile";
 import Casting from "./pages/Casting";
 import Board from "./pages/Board";
+import Notifications from "./pages/Notifications";
 
 function App() {
    return (
@@ -17,6 +18,7 @@ function App() {
                   <Route path="/account" exact component={Board} />
                   <Route path="/profile" exact component={Profile} />
                   <Route path={`/casting/`} component={Casting} />
+                  <Route path={`/notifications`} component={Notifications} />
                </Switch>
             </Layout>
          </Router>
