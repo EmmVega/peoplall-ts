@@ -13,6 +13,9 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
+import { useRecoilState } from "recoil";
+import { isLoggedInAtom } from "../shared/store/store";
+import { IconButton } from "@material-ui/core";
 
 const style = {
    position: "absolute" as "absolute",
@@ -27,6 +30,7 @@ const style = {
 };
 
 export default function CastingOptions() {
+   const [isLoggedIn] = useRecoilState(isLoggedInAtom);
    const history = useHistory();
    const [modalStatus, setModalStatus] = useState({
       isActive: false,
@@ -46,17 +50,23 @@ export default function CastingOptions() {
       history.push("/account");
    };
 
-   const addCasting = () =>
-      setModalStatus({
-         isActive: true,
-         button: "add",
-      });
+   const addCasting = () => {
+      if (isLoggedIn) {
+         setModalStatus({
+            isActive: true,
+            button: "add",
+         });
+      } else history.push("/sign");
+   };
 
-   const applyOnCasting = () =>
-      setModalStatus({
-         isActive: true,
-         button: "apply",
-      });
+   const applyOnCasting = () => {
+      if (isLoggedIn) {
+         setModalStatus({
+            isActive: true,
+            button: "apply",
+         });
+      } else history.push("/sign");
+   };
 
    return (
       <>
@@ -73,6 +83,16 @@ export default function CastingOptions() {
          >
             <Fade in={modalStatus.isActive}>
                <Box sx={style}>
+                  <Button
+                     variant="outlined"
+                     onClick={handleClose}
+                     size="small"
+                     sx={{ p: 0, ml: 43 }}
+                  >
+                     <IconButton color="default" size="small">
+                        x
+                     </IconButton>
+                  </Button>
                   <Typography
                      id="transition-modal-title"
                      variant="h6"
@@ -86,7 +106,7 @@ export default function CastingOptions() {
                   <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                      {modalStatus.button === "add"
                         ? "Puedes encontrarlo fácilmente en tu tablero"
-                        : "Queda esperar a que se comuniquen contigo"}
+                        : "También se agregó a tu tablero para que puedas ver el status. ¡Mucha suerte!"}
                   </Typography>
                   <Stack direction="row" justifyContent="center" spacing={2}>
                      <Button

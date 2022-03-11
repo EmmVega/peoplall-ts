@@ -24,6 +24,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useHistory } from "react-router";
+import { useRecoilState } from "recoil";
+import { isLoggedInAtom } from "../shared/store/store";
 
 // const Search = styled("div")(({ theme }) => ({
 //    position: "relative",
@@ -66,6 +68,7 @@ import { useHistory } from "react-router";
 // }));
 
 function PrimarySearchAppBar() {
+   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
    const history = useHistory();
    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -75,6 +78,8 @@ function PrimarySearchAppBar() {
    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
    const goHome = () => {
+      handleMenuClose();
+      // setIsLoggedIn(false);
       history.push("/");
    };
    const goProfile = () => {
@@ -87,6 +92,9 @@ function PrimarySearchAppBar() {
    };
    const goNotifications = () => {
       history.push("/notifications");
+   };
+   const goSign = () => {
+      history.push("/sign");
    };
 
    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -132,6 +140,7 @@ function PrimarySearchAppBar() {
       >
          <MenuItem onClick={goProfile}>Profile</MenuItem>
          <MenuItem onClick={goAccount}>My Board</MenuItem>
+         <MenuItem onClick={goHome}>Log Out</MenuItem>
       </Menu>
    );
 
@@ -217,7 +226,6 @@ function PrimarySearchAppBar() {
                   />
                </Search> */}
                <Box sx={{ flexGrow: 1 }} />
-
                <Box
                   sx={{
                      display: {
@@ -231,25 +239,41 @@ function PrimarySearchAppBar() {
                         <MailIcon />
                      </Badge>
                   </IconButton> */}
-                  <IconButton
-                     aria-label="show 17 new notifications"
-                     color="inherit"
-                     onClick={goNotifications}
-                  >
-                     <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
-                     </Badge>
-                  </IconButton>
-                  <IconButton
-                     edge="end"
-                     aria-label="account of current user"
-                     aria-controls={menuId}
-                     aria-haspopup="true"
-                     onClick={handleProfileMenuOpen}
-                     color="inherit"
-                  >
-                     <AccountCircle />
-                  </IconButton>
+                  {isLoggedIn ? (
+                     <>
+                        <IconButton
+                           aria-label="show 17 new notifications"
+                           color="inherit"
+                           onClick={goNotifications}
+                        >
+                           <Badge badgeContent={17} color="error">
+                              <NotificationsIcon />
+                           </Badge>
+                        </IconButton>
+                        <IconButton
+                           edge="end"
+                           aria-label="account of current user"
+                           aria-controls={menuId}
+                           aria-haspopup="true"
+                           onClick={handleProfileMenuOpen}
+                           color="inherit"
+                        >
+                           <AccountCircle />
+                        </IconButton>
+                     </>
+                  ) : (
+                     <IconButton color="inherit">
+                        <Typography
+                           variant="h6"
+                           noWrap
+                           component="div"
+                           sx={{ display: { xs: "none", sm: "block" } }}
+                           onClick={goSign}
+                        >
+                           SIGN IN/UP
+                        </Typography>
+                     </IconButton>
+                  )}
                </Box>
                <Box sx={{ display: { xs: "flex", md: "none" } }}>
                   <IconButton

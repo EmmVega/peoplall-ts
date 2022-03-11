@@ -1,11 +1,12 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 // import TextField from "@mui/material/TextField";
+// import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 
 import { MenuItem } from "@material-ui/core";
 import { Button } from "@material-ui/core";
-// import Button from "@mui/material/Button";
+import { useHistory } from "react-router-dom";
 
 const industrias = [
    {
@@ -32,12 +33,20 @@ const industrias = [
 
 const generos = ["Femenina", "Masculino"];
 
-export default function ColorTextFields() {
+type Props = {
+   filterCast: (ind: any, gen: any) => void;
+};
+
+export default function ColorTextFields(props: Props) {
    const [selectedIndustry, setSelectedIndustry] = React.useState("Cine");
    const [selectedGenre, setSelectedGenre] = React.useState("Femenina");
 
    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSelectedIndustry(event.target.value);
+   };
+
+   const filterHandler = () => {
+      props.filterCast(selectedIndustry, selectedGenre);
    };
 
    return (
@@ -91,8 +100,17 @@ export default function ColorTextFields() {
             focused
             sx={{ m: "auto" }}
          />
-         <Button variant="contained" color="primary">
+         <Button variant="contained" color="primary" onClick={filterHandler}>
             BUSCAR
+         </Button>
+         <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+               props.filterCast(null, null);
+            }}
+         >
+            Clear Filters
          </Button>
       </Box>
    );
