@@ -6,8 +6,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useHistory } from "react-router-dom";
-import { useHttpClient } from "../shared/hooks/http-hook";
-import { useEffect, useState } from "react";
 import { CastingData } from "../pages/Casting";
 
 // function createData(
@@ -74,6 +72,11 @@ export default function CastingList(props: Props) {
                      <TableCell align="right">{row.date}</TableCell>
                   </TableRow>
                ))}
+               {!rows.length && (
+                  <p style={{ color: "blue" }}>
+                     No existen castings con esa búsqueda
+                  </p>
+               )}
             </TableBody>
          </Table>
       </TableContainer>

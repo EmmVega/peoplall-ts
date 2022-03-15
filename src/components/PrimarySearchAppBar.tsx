@@ -78,8 +78,6 @@ function PrimarySearchAppBar() {
    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
    const goHome = () => {
-      handleMenuClose();
-      // setIsLoggedIn(false);
       history.push("/");
    };
    const goProfile = () => {
@@ -88,13 +86,17 @@ function PrimarySearchAppBar() {
    };
    const goAccount = () => {
       handleMenuClose();
-      history.push("/account");
+      history.push("/board");
    };
    const goNotifications = () => {
       history.push("/notifications");
    };
    const goSign = () => {
       history.push("/sign");
+   };
+   const logOut = () => {
+      setIsLoggedIn(false);
+      handleMenuClose();
    };
 
    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -140,7 +142,7 @@ function PrimarySearchAppBar() {
       >
          <MenuItem onClick={goProfile}>Profile</MenuItem>
          <MenuItem onClick={goAccount}>My Board</MenuItem>
-         <MenuItem onClick={goHome}>Log Out</MenuItem>
+         <MenuItem onClick={logOut}>Log Out</MenuItem>
       </Menu>
    );
 
@@ -204,13 +206,12 @@ function PrimarySearchAppBar() {
                >
                   <MenuIcon />
                </IconButton> */}
-               <IconButton color="inherit">
+               <IconButton color="inherit" onClick={goHome}>
                   <Typography
                      variant="h6"
                      noWrap
                      component="div"
                      sx={{ display: { xs: "none", sm: "block" } }}
-                     onClick={goHome}
                   >
                      HOME
                   </Typography>
@@ -262,13 +263,12 @@ function PrimarySearchAppBar() {
                         </IconButton>
                      </>
                   ) : (
-                     <IconButton color="inherit">
+                     <IconButton color="inherit" onClick={goSign}>
                         <Typography
                            variant="h6"
                            noWrap
                            component="div"
                            sx={{ display: { xs: "none", sm: "block" } }}
-                           onClick={goSign}
                         >
                            SIGN IN/UP
                         </Typography>

@@ -7,15 +7,54 @@ import { useState } from "react";
 import { isLoggedInAtom } from "../shared/store/store";
 import { useRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
+import {
+   validate,
+   VALIDATOR_EMAIL,
+   VALIDATOR_MINLENGTH,
+} from "../shared/utils/validators";
+import { useHttpClient } from "../shared/hooks/http-hook";
 
 const Sign = () => {
-   const [signUpFormMode, setSignupFormMode] = useState(true);
    const [, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+   const [signUpFormMode, setSignupFormMode] = useState(true);
+   const [password, setPassword] = useState("");
+   const [email, setEmail] = useState("");
    const history = useHistory();
+   const { sendRequest } = useHttpClient();
+   const [passIsValid, setPassIsValid] = useState(true);
+   const [emailIsValid, setEmailIsValid] = useState(true);
 
-   const signHandler = () => {
-      if (signUpFormMode) setIsLoggedIn(true);
-      history.goBack();
+   const emailValidator = () => {
+      const emailIsValid = validate(email, [VALIDATOR_EMAIL()]);
+      setEmailIsValid(emailIsValid);
+   };
+
+   const passValidator = () => {
+      const passIsValid = validate(password, [VALIDATOR_MINLENGTH(6)]);
+      setPassIsValid(passIsValid);
+   };
+
+   const signHandler = async () => {
+      const url = signUpFormMode ? "signin" : "signup";
+      if (emailIsValid && passIsValid) {
+         console.log("pasan");
+         try {
+            const response = await sendRequest(
+               `http://localhost:5000/api/user/${url}`,
+               "POST",
+               JSON.stringify({
+                  email,
+                  password,
+               }),
+               {
+                  "Content-Type": "application/json",
+               }
+            );
+            console.log(response);
+            setIsLoggedIn(true);
+            history.goBack();
+         } catch (err) {}
+      }
    };
 
    return (
@@ -35,14 +74,36 @@ const Sign = () => {
                      color="secondary"
                      focused
                      sx={{ m: "10px" }}
+                     value={email}
+                     onChange={(e) => {
+                        setEmail(e.target.value);
+                     }}
+                     error={!emailIsValid}
+                     onBlur={emailValidator}
                   />
+                  {!emailIsValid && (
+                     <Typography align="center" color="error">
+                        Please enter a valid email
+                     </Typography>
+                  )}
                   <TextField
                      label="password"
                      color="secondary"
                      type="password"
                      focused
                      sx={{ m: "10px" }}
+                     value={password}
+                     onChange={(e) => {
+                        setPassword(e.target.value);
+                     }}
+                     error={!passIsValid}
+                     onBlur={passValidator}
                   />
+                  {!passIsValid && (
+                     <Typography align="center" color="error">
+                        Password must be at least 6 chars
+                     </Typography>
+                  )}
                   <Typography align="center">
                      {`${
                         signUpFormMode
@@ -63,6 +124,7 @@ const Sign = () => {
                      color="primary"
                      sx={{ m: "10px" }}
                      onClick={signHandler}
+                     disabled={!emailIsValid || !passIsValid}
                   >
                      Sign {`${signUpFormMode ? "in!" : "up!"}`}
                   </Button>

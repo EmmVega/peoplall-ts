@@ -6,7 +6,6 @@ import { TextField } from "@mui/material";
 
 import { MenuItem } from "@material-ui/core";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 
 const industrias = [
    {

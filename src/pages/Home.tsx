@@ -3,10 +3,9 @@ import { useHistory } from "react-router-dom";
 import CastingList from "../components/CastingList";
 import ColorTextFields from "../components/ColorTextFields";
 import { useHttpClient } from "../shared/hooks/http-hook";
-import { CastingData } from "./Casting";
 
 const Home = () => {
-   const { error, sendRequest } = useHttpClient();
+   const { sendRequest } = useHttpClient();
    const [rows, setRows] = useState<any[]>([]);
    const history = useHistory();
 
