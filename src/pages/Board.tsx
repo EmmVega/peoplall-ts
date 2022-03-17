@@ -1,4 +1,8 @@
-import CastingCard from "../components/CastingCard";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import CastingCard, { CastingData } from "../components/CastingCard";
+import { useHttpClient } from "../shared/hooks/http-hook";
+import { uIdAtom } from "../shared/store/store";
 
 const Board = () => {
    const castingsOnboard = [
@@ -21,6 +25,25 @@ const Board = () => {
          id: 6,
       },
    ];
+   const { sendRequest } = useHttpClient();
+   const [castings, setCastings] = useState<CastingData[]>([]);
+   const [uId] = useRecoilState(uIdAtom);
+
+   const fetchCastings = async () => {
+      try {
+         const response = await sendRequest(
+            `http://localhost:5000/castings/board/${uId}`
+         );
+         setCastings(response);
+         console.log(response);
+      } catch (err) {
+         console.log(err);
+      }
+   };
+
+   useEffect(() => {
+      fetchCastings();
+   }, []);
 
    return (
       <div
@@ -31,8 +54,8 @@ const Board = () => {
             flexWrap: "wrap",
          }}
       >
-         {castingsOnboard.map((cast) => (
-            <CastingCard key={cast.id} />
+         {castings.map((cast) => (
+            <CastingCard key={cast.id} castingData={cast} />
          ))}
       </div>
    );

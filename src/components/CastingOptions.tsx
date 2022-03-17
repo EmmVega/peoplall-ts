@@ -44,10 +44,10 @@ export default function CastingOptions() {
       }));
 
    const getBack = () => {
-      history.push("/");
+      history.goBack();
    };
    const goBoard = () => {
-      history.push("/account");
+      history.push("/board");
    };
 
    const addCasting = () => {

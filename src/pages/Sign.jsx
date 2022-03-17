@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import classes from "./styles/form.module.css";
 import { Typography } from "@mui/material";
 import { useState } from "react";
-import { isLoggedInAtom } from "../shared/store/store";
+import { isLoggedInAtom, uIdAtom } from "../shared/store/store";
 import { useRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import {
@@ -16,6 +16,7 @@ import { useHttpClient } from "../shared/hooks/http-hook";
 
 const Sign = () => {
    const [, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+   const [, setUid] = useRecoilState(uIdAtom);
    const [signUpFormMode, setSignupFormMode] = useState(true);
    const [password, setPassword] = useState("");
    const [email, setEmail] = useState("");
@@ -50,8 +51,9 @@ const Sign = () => {
                   "Content-Type": "application/json",
                }
             );
-            console.log(response);
             setIsLoggedIn(true);
+            console.log(response);
+            setUid(response.user.uid);
             history.goBack();
          } catch (err) {}
       }
