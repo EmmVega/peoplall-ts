@@ -60,7 +60,7 @@ export default function CastingList(props: Props) {
                   <TableRow
                      key={row.productor}
                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                     onClick={goToCasting.bind(null, row.id)}
+                     onClick={goToCasting.bind(null, row._id)}
                      hover
                      style={{ cursor: "pointer" }}
                   >

@@ -52,8 +52,8 @@ const Sign = () => {
                }
             );
             setIsLoggedIn(true);
-            console.log(response);
-            setUid(response.user.uid);
+            setUid(response.user._id);
+            console.log(response.user._id);
             history.goBack();
          } catch (err) {}
       }

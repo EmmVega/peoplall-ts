@@ -6,7 +6,7 @@ import { useHttpClient } from "../shared/hooks/http-hook";
 import { useParams } from "react-router-dom";
 
 export type CastingData = {
-   id: string;
+   _id: string;
    productor: string;
    director: string;
    dp: string;
@@ -20,7 +20,7 @@ export type CastingData = {
 const Casting: React.FC = () => {
    const { error, sendRequest } = useHttpClient();
    const [castingData, setCastingData] = useState<CastingData>({
-      id: "",
+      _id: "",
       productor: "",
       director: "",
       dp: "",

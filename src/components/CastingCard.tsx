@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router";
 
 export type CastingData = {
-   id: string;
+   _id: string;
    productor: string;
    director: string;
    dp: string;
@@ -47,7 +47,7 @@ export default function CastingCard(props: Props) {
             <Button
                size="small"
                onClick={() => {
-                  goCasting(castingData.id);
+                  goCasting(castingData._id);
                }}
             >
                Open

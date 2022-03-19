@@ -8,8 +8,7 @@ type Props = {
 
 const CastingInfo = (props: Props) => {
    //  const castingData: object = props.castingData;
-   //  console.log(castingData.title);
-   console.log(props.castingData);
+
    const { castingData } = props;
    return (
       <Box sx={{ width: "100%", maxWidth: 1200, mx: "auto", mt: 5, ml: 5 }}>
