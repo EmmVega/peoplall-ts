@@ -14,8 +14,9 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useRecoilState } from "recoil";
-import { isLoggedInAtom } from "../shared/store/store";
+import { isLoggedInAtom, uIdAtom } from "../shared/store/store";
 import { IconButton } from "@material-ui/core";
+import { useHttpClient } from "../shared/hooks/http-hook";
 
 const style = {
    position: "absolute" as "absolute",
@@ -29,19 +30,28 @@ const style = {
    p: 4,
 };
 
-export default function CastingOptions() {
+type Props = {
+   cId: String;
+};
+
+export default function CastingOptions(props: Props) {
+   const [uId] = useRecoilState(uIdAtom);
+   const { error, sendRequest, clearError } = useHttpClient();
    const [isLoggedIn] = useRecoilState(isLoggedInAtom);
    const history = useHistory();
-   const [modalStatus, setModalStatus] = useState({
+   const [modalStatus, setModalStatus] = useState<any>({
       isActive: false,
       button: "",
+      error: "",
    });
+   const { cId } = props;
 
-   const handleClose = () =>
-      setModalStatus((prevProps) => ({
+   const handleClose = () => {
+      clearError();
+      setModalStatus(() => ({
          isActive: false,
-         button: prevProps.button,
       }));
+   };
 
    const getBack = () => {
       history.goBack();
@@ -50,21 +60,65 @@ export default function CastingOptions() {
       history.push("/board");
    };
 
-   const addCasting = () => {
+   const addCasting = async () => {
       if (isLoggedIn) {
-         setModalStatus({
-            isActive: true,
-            button: "add",
-         });
+         let response;
+         try {
+            response = await sendRequest(
+               `http://localhost:5000/api/user/addCasting`,
+               "POST",
+               JSON.stringify({
+                  casting: { _id: cId, status: "pinned" },
+                  uId,
+               }),
+               {
+                  "Content-Type": "application/json",
+               }
+            );
+         } catch (err) {}
+
+         if (response?.message === "Successful") {
+            setModalStatus({
+               isActive: true,
+               button: "add",
+               error: null,
+            });
+         } else {
+            setModalStatus({
+               isActive: true,
+               error: error,
+            });
+         }
       } else history.push("/sign");
    };
 
-   const applyOnCasting = () => {
+   const applyOnCasting = async () => {
       if (isLoggedIn) {
-         setModalStatus({
-            isActive: true,
-            button: "apply",
-         });
+         let response;
+         try {
+            response = await sendRequest(
+               `http://localhost:5000/api/user/addCasting`,
+               "POST",
+               JSON.stringify({
+                  casting: { _id: cId, status: "applied" },
+                  uId,
+               }),
+               {
+                  "Content-Type": "application/json",
+               }
+            );
+         } catch (err) {}
+
+         if (response?.message === "Successful") {
+            setModalStatus({
+               isActive: true,
+               button: "apply",
+            });
+         } else {
+            setModalStatus({
+               isActive: true,
+            });
+         }
       } else history.push("/sign");
    };
 
@@ -98,15 +152,22 @@ export default function CastingOptions() {
                      variant="h6"
                      component="h2"
                   >
-                     {modalStatus.button === "add"
-                        ? "Se agregó al tablero"
-                        : "Has aplicado a este casting"}
+                     {modalStatus.button === "add" && !error && (
+                        <div>Has agregado este casting</div>
+                     )}
+                     {modalStatus.button === "apply" && !error && (
+                        <div>Has aplicado a este casting</div>
+                     )}
+                     {error && <div>{error}</div>}
                   </Typography>
 
                   <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                     {modalStatus.button === "add"
-                        ? "Puedes encontrarlo fácilmente en tu tablero"
-                        : "También se agregó a tu tablero para que puedas ver el status. ¡Mucha suerte!"}
+                     {modalStatus.button === "add" &&
+                        !error &&
+                        "Puedes encontrarlo fácilmente en tu tablero"}
+                     {modalStatus.button === "apply" &&
+                        !error &&
+                        "También se agregó a tu tablero para que puedas ver el status. ¡Mucha suerte!"}
                   </Typography>
                   <Stack direction="row" justifyContent="center" spacing={2}>
                      <Button

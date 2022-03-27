@@ -41,6 +41,9 @@ export default function CastingCard(props: Props) {
                Obra de {castingData.industry} dirigida por{" "}
                {castingData.director} y producida por {castingData.productor}
             </Typography>
+            <Typography variant="h6" color="text.primary">
+               Status: {castingData.status}
+            </Typography>
          </CardContent>
          <CardActions>
             <Button size="small">Share</Button>
@@ -52,7 +55,6 @@ export default function CastingCard(props: Props) {
             >
                Open
             </Button>
-            <Button size="small">{castingData.status}</Button>
          </CardActions>
       </Card>
    );

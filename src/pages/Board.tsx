@@ -30,7 +30,6 @@ const Board = () => {
    const [uId] = useRecoilState(uIdAtom);
 
    const fetchCastings = async () => {
-      console.log(uId);
       try {
          const response = await sendRequest(
             `http://localhost:5000/castings/board/${uId}`

@@ -48,8 +48,12 @@ const Casting: React.FC = () => {
 
    return (
       <>
-         <CastingInfo castingData={castingData} />
-         <CastingOptions />
+         {castingData._id.length ? (
+            <CastingInfo castingData={castingData} />
+         ) : (
+            <p>Cargando...</p>
+         )}
+         <CastingOptions cId={castingData._id} />
       </>
    );
 };
