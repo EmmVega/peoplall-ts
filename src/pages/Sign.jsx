@@ -4,8 +4,8 @@ import Button from "@mui/material/Button";
 import classes from "./styles/form.module.css";
 import { Typography } from "@mui/material";
 import { useState } from "react";
-import { isLoggedInAtom, uIdAtom } from "../shared/store/store";
-import { useRecoilState } from "recoil";
+import { authToken, isLoggedInAtom, uIdAtom } from "../shared/store/store";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import {
    validate,
@@ -16,7 +16,8 @@ import { useHttpClient } from "../shared/hooks/http-hook";
 
 const Sign = () => {
    const [, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
-   const [, setUid] = useRecoilState(uIdAtom);
+   const setUid = useSetRecoilState(uIdAtom);
+   const [token, setToken] = useRecoilState(authToken);
    const [signUpFormMode, setSignupFormMode] = useState(true);
    const [password, setPassword] = useState("");
    const [email, setEmail] = useState("");
@@ -49,11 +50,19 @@ const Sign = () => {
                }),
                {
                   "Content-Type": "application/json",
+                  authorization: "Bearer " + token,
                }
             );
             setIsLoggedIn(true);
             setUid(response.user._id);
-            console.log(response.user._id);
+            setToken(response.token);
+            localStorage.setItem(
+               "userData",
+               JSON.stringify({
+                  userId: response.user._id,
+                  token: response.token,
+               })
+            );
             history.goBack();
          } catch (err) {}
       }

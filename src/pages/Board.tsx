@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import CastingCard, { CastingData } from "../components/CastingCard";
 import { useHttpClient } from "../shared/hooks/http-hook";
-import { uIdAtom } from "../shared/store/store";
+import { authToken, uIdAtom } from "../shared/store/store";
 
 const Board = () => {
    // const castingsOnboard = [
@@ -28,11 +28,17 @@ const Board = () => {
    const { sendRequest } = useHttpClient();
    const [castings, setCastings] = useState<CastingData[]>([]);
    const [uId] = useRecoilState(uIdAtom);
+   const [token] = useRecoilState(authToken);
 
    const fetchCastings = async () => {
       try {
          const response = await sendRequest(
-            `http://localhost:5000/castings/board/${uId}`
+            `http://localhost:5000/castings/board/${uId}`,
+            "GET",
+            null,
+            {
+               authorization: "Bearer " + token,
+            }
          );
          setCastings(response);
          console.log(response);

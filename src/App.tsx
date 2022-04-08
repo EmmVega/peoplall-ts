@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import Layout from "./shared/layout/Layout";
 import Home from "./pages/Home";
@@ -13,11 +13,23 @@ import Casting from "./pages/Casting";
 import Board from "./pages/Board";
 import Notifications from "./pages/Notifications";
 import Sign from "./pages/Sign";
-import { useRecoilState } from "recoil";
-import { isLoggedInAtom } from "./shared/store/store";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { authToken, isLoggedInAtom, uIdAtom } from "./shared/store/store";
 
 function App() {
-   const [isLoggedIn] = useRecoilState(isLoggedInAtom);
+   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+   const setUid = useSetRecoilState(uIdAtom);
+   const setToken = useSetRecoilState(authToken);
+
+   useEffect(() => {
+      const storedData = JSON.parse(localStorage.getItem("userData") || "");
+      if (storedData && storedData.token) {
+         setIsLoggedIn(true);
+         setUid(storedData.userId);
+         setToken(storedData.token);
+      }
+   }, []);
+
    return (
       <Router>
          <Layout>

@@ -24,8 +24,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useHistory } from "react-router";
-import { useRecoilState } from "recoil";
-import { isLoggedInAtom } from "../shared/store/store";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isLoggedInAtom, uIdAtom } from "../shared/store/store";
 
 // const Search = styled("div")(({ theme }) => ({
 //    position: "relative",
@@ -69,6 +69,7 @@ import { isLoggedInAtom } from "../shared/store/store";
 
 function PrimarySearchAppBar() {
    const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+   const setUid = useSetRecoilState(uIdAtom);
    const history = useHistory();
    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -97,6 +98,8 @@ function PrimarySearchAppBar() {
    const logOut = () => {
       setIsLoggedIn(false);
       handleMenuClose();
+      setUid(null);
+      localStorage.removeItem("userData");
    };
 
    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
