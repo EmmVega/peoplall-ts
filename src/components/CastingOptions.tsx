@@ -108,7 +108,7 @@ export default function CastingOptions(props: Props) {
             handleClose={handleClose}
             error={error}
             goBoard={goBoard}
-            getBack={getBack}
+            onFileUpload={() => {}}
          />
          <Stack direction="row" justifyContent="center" spacing={2}>
             <Button

@@ -19,7 +19,12 @@ export const useHttpClient = () => {
                headers,
                signal: httpAbortCtroll.signal,
             });
-            const responseData = await response.json();
+
+            let responseData;
+
+            if (headers.responseType) {
+               responseData = await response.arrayBuffer();
+            } else responseData = await response.json();
 
             activeHttpRequest.current = activeHttpRequest.current.filter(
                (reqCtrl) => reqCtrl !== httpAbortCtroll
@@ -30,6 +35,7 @@ export const useHttpClient = () => {
             }
             setIsLoading(false);
             return responseData;
+            // return respuesta;
          } catch (err) {
             console.log(err);
             setError(err.message);
